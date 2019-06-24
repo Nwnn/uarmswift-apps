@@ -6,7 +6,7 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '../../..'))
 from uarm.wrapper import SwiftAPI
 
 swift1 = SwiftAPI(filters={'hwid': 'USB VID:PID=2341:0042'})
-swift2 = SwiftAPI(filters={'hwid': 'USB VID:PID=2341:0042'})
+# swift2 = SwiftAPI(filters={'hwid': 'USB VID:PID=2341:0042'})
 # swift3 = SwiftAPI(filters={'hwid': 'USB VID:PID=2341:0042'})
 
 swift1.waiting_ready()

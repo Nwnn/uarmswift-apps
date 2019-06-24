@@ -4,13 +4,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pylint = "*"
 
 [packages]
-uarm-python-sdk = {git = "https://github.com/uArm-Developer/uArm-Python-SDK.git"}
-rx = "*"
-bottle = "*"
-pretty-midi = "*"
+uarm-python-sdk = {path = ""}
+pygame = "*"
 
 [requires]
 python_version = "3.7"
