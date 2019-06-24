@@ -4,10 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+rope = "*"
 
 [packages]
 uarm-python-sdk = {path = ""}
 pygame = "*"
+pretty-midi = "*"
 
 [requires]
 python_version = "3.7"
