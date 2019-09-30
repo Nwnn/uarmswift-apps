@@ -8,7 +8,7 @@ rope = "*"
 pylint = "*"
 
 [packages]
-uarm-python-sdk = {path = "/Users/mochi/Desktop/uArm-Python-SDK-2-3.0"}
+uarm-python-sdk = {path = "/Users/infolav/Desktop/uArm-Python-SDK"}
 pygame = "*"
 pretty-midi = "*"
 

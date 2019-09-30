@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c4797658e7451ef815ea4fedc8107f7a74c2d2479f18203307af226381d0de80"
+            "sha256": "b18399fd1770f62faa9abd4e1cf2b444cec694ca6e7561f417aac00d5f9ef2ac"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -89,7 +89,7 @@
             "version": "==1.12.0"
         },
         "uarm-python-sdk": {
-            "path": "/Users/mochi/Desktop/uArm-Python-SDK-2-3.0"
+            "path": "/Users/infolav/Desktop/uArm-Python-SDK"
         }
     },
     "develop": {

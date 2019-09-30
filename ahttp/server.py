@@ -28,7 +28,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         with client_socket:
             try:
                 msg = client_socket.recv(1024)
-                client_socket.send(('HTTP/1.1 200 OK \nAccess-Control-Allow-Origin: * \ncontent-type: application/json; \n\n{ "pos" : [' + str(position[0]) + ',' + str(position[1]) + ',' + str(position[2]) + ',' + str(position[3]) + '], "pump" : false }').encode('utf-8'))
+                client_socket.send(('HTTP/1.1 200 OK \nAccess-Control-Allow-Origin: * \ncontent-type: application/json; \n\n{ "pos" : [' + str(position[0]) + ',' + str(position[1]) + ',' + str(position[2]) + ',' + str(position[3]) + '], "pump" : '+ str(swift.get_limit_switch()).lower() +' }').encode('utf-8'))
 
             except:
                 client_socket.close()
