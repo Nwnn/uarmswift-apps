@@ -4,13 +4,9 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-rope = "*"
-pylint = "*"
 
 [packages]
-uarm-python-sdk = {path = "/Users/mochi/Desktop/uArm-Python-SDK-2-3.0"}
-pygame = "*"
-pretty-midi = "*"
+uarm-python-sdk = {path = "./uArm-Python-SDK-2.0"}
 
 [requires]
 python_version = "3.7"
