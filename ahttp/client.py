@@ -6,16 +6,14 @@ import time
 
 decoder = json.decoder.JSONDecoder()
 
-
 while True:
-    print("req")
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect(('192.168.1.5', 80))
         # s.connect(('localhost', 80))
         s.send(b'hello')
 
         data = s.recv(1024)
-        print(data)
+        
         posStr = data.decode('utf-8').split('\n')[4]
         req = decoder.decode(posStr)
 
