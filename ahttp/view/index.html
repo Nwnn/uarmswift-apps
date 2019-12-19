@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <style>
+    canvas {
+        border-radius: 10px;
+    }
+    </style>
+
+</head>
+<body>
+    <div id="app" class="container mt-3">
+
+        <div class="row">
+            <div class="col-12">
+                <div class="alert alert-secondary" role="alert">
+                    ⚡️データ受信中 : {{ armState }}
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-sm" style="font-size: 16px;">
+                    <thead>
+                        <tr>
+                        <th scope="col">取得データ</th>
+                        <th scope="col">値</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <th scope="row">X</th>
+                        <td>{{ armState.pos[0] }}</td>
+                        </tr>
+                        <tr>
+                        <th scope="row">Y</th>
+                        <td>{{ armState.pos[1] }}</td>
+                        </tr>
+                        <tr>
+                        <th scope="row">Z</th>
+                        <td>{{ armState.pos[2] }}</td>
+                        </tr>
+                        <th scope="row">ヘッド回転</th>
+                        <td>{{ armState.pos[3] }}</td>
+                        </tr>
+                        <th scope="row">ヘッドボタン</th>
+                        <td v-bind:class="[armState.pump ? 'table-danger' : 'table-info']" style="border-radius: 5px;">
+                            <span v-if="armState.pump">
+                                押している
+                            </span>
+                            <span v-else>
+                                押してない
+                            </span>
+                        </td>
+                        </tr>
+                    </tbody>
+                    </table>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="container">
+            <div class="row justify-content-around">
+                    <div class="view"></div> 
+            </div>
+
+    </div>
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.3/pixi.min.js"></script>
+    <script>
+
+        const app = new Vue({
+            el: '#app',
+            data: {
+                armState: { "pos" : [0,0,0,0], "pump" : false }
+            }
+        })
+
+        $(() => {
+
+            // drawer
+
+            let type = "WebGL"
+            if(!PIXI.utils.isWebGLSupported()){
+            type = "canvas"
+            }
+
+            PIXI.utils.sayHello(type)
+
+            let ctx = new PIXI.Application({width: 1200, height: 400, antialias: true });
+            $(".view").append(ctx.view)
+
+            // お絵かき
+            const drawer = new PIXI.Graphics();
+            ctx.stage.addChild(drawer)
+
+            // お絵かき
+            const pointer = new PIXI.Graphics();
+            ctx.stage.addChild(pointer)
+
+            // 補助線
+            const cursor = new PIXI.Graphics();
+            cursor.beginFill(0xFFFFFF, 0.2);
+            cursor.lineStyle(1, 0xff0000);
+            ctx.stage.addChild(cursor);
+            cursor.drawCircle(0, 0, 3)
+
+            let resetFrame = 0;
+
+            setInterval(async () => {
+                const { data } = await axios("http://localhost:8080")
+
+                if(data.pos[3] >= 60000) {
+                    resetFrame += 1;
+                    if(resetFrame >= 30){
+                        drawer.clear();
+                        pointer.clear();
+                        resetFrame = 0;
+
+                    }
+
+                }
+
+                app.$data.armState = data
+
+                // 補助線の移動
+                cursor.position.x = (data.pos[1] + (ctx.renderer.width / 2));
+                cursor.position.y = data.pos[0];
+                cursor.scale.x = data.pos[3] / 8
+                cursor.scale.y = data.pos[3] / 8;
+
+                // スイッチ押下時のみ描画
+                if(data.pump) {
+                    drawer.beginFill(0xFFFFFF);
+                    drawer.drawCircle(
+                        (data.pos[1] + (ctx.renderer.width / 2)),
+                        data.pos[0],
+                        data.pos[3] / 4 );
+                    drawer.endFill();
+
+                    pointer.beginFill(0x000000);
+                    pointer.drawCircle(
+                        (data.pos[1] + (ctx.renderer.width / 2)),
+                        data.pos[0],
+                        2 );
+                    pointer.endFill();
+                }
+
+            }, 30)
+
+
+        })
+
+
+
+    
+    </script>
+</body>
+</html>
